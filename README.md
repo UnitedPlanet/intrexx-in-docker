@@ -76,7 +76,19 @@ By doing so, the intrexx container will be destroyed, the image updated and star
 Please be aware, that the startup may take extended time, because of the portal patch needed.
 
 ## Configure nginx as reverse proxy
-TODO
+If you want to use nginx as a frontend webserver and thereby enable SSL encryption, you can do so by following these steps:
+- In the `docker-compose.yml` enable the commented lines for the nginx service
+- Within the directory `resource/nginx/ssl` provide the needed certificate files and a DH param file for your server
+- Within the files `docker-compose.yml` and `resource/nginx/conf.d/default.conf` replace all occurences of `example.unitedplanet.de` with your desired DNS
+- If you changed the portal name (by modifying the EVN Var PORTAL_NAME) also adjust the htmlroot path in `resource/nginx/conf.d/default.conf`
+- If you mounted a local directory instead of using the portal-data volume, adjust the volume definition in the nginx service in `docker-compose.yml` as well
+
+If your deployment is already runngin, you may now use the following commands, to start your nginx frontend:
+```bash
+docker-compose create nginx
+docker-compose start nginx
+```
+If not, just run the above described `up` commands and the nginx service will be started with your deployment.
 
 # Tags
 The intrexx images are tagged with the semantic Version of the Release. The semantic Version contains 3 Parts:
