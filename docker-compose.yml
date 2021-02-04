@@ -23,7 +23,7 @@ services:
 
 
   intrexx:
-    image: docker.dev.unitedplanet.de:5000/intrexx:21.03-latest
+    image: unitedplanet/intrexx:21.03-latest
     depends_on:
       - db
       - solr
