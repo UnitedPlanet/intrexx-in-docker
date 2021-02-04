@@ -9,6 +9,14 @@ There are 4 use-cases:
 
 Case 4 is not implemented yet.
 
+# Prerequisites
+In order to deploy intrexx as a docker container, we use [docker-compose](https://docs.docker.com/compose/). This is done, because intrexx can not be run as a standalone container but needs a database and a search server to work correctly. Optionally a nginx server can be useful as reverse proxy.
+Managing the deployment as a whole is enabled by docker-compose.
+
+In order to follow these guidelines, you need to have Docker and docker-compose configured on your machine. Please follow the official installation guidelines:
+- [docker installation](https://docs.docker.com/get-docker/)
+- [docker-compose installation](https://docs.docker.com/compose/install/)
+
 # Usage
 ## Create new (blank) portal
 This is the most simple use-case. No changes are needed. Just run
@@ -67,6 +75,9 @@ docker-compose up
 By doing so, the intrexx container will be destroyed, the image updated and started again as a new intrexx container. Meanwhile the volume persists. On startup the already present portal is detected, patched to the new intrexx version and started.
 Please be aware, that the startup may take extended time, because of the portal patch needed.
 
+## Configure nginx as reverse proxy
+TODO
+
 # Tags
 The intrexx images are tagged with the semantic Version of the Release. The semantic Version contains 3 Parts:
 - Major Version
@@ -74,6 +85,8 @@ The intrexx images are tagged with the semantic Version of the Release. The sema
 - Patch Level (OU Number)
 
 For example, the semantic Version of intrexx 21.03 OU05 would be 10.0.5.
+
+Additionally, for every major version, there is a specific latest tag. e.g. `21.03-latest`. This may be used, to always receive the newest patches but no major version upgrades automatically.
 
 # FAQ
 ## Is this deployment scalable?
