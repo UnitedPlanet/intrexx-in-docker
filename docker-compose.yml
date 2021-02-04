@@ -1,0 +1,57 @@
+version: "3"
+services:
+
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_PASSWORD: .admin1
+      POSTGRES_USER: postgres
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    volumes:
+      - intrexx-db-data:/var/lib/postgresql/data
+
+
+  solr:
+    image: solr:8.4.1
+    restart: unless-stopped
+    ports:
+     - "8984:8983"
+     - "9984:9983"
+    command: -c
+
+
+  intrexx:
+    image: docker.dev.unitedplanet.de:5000/intrexx:21.03-latest
+    depends_on:
+      - db
+      - solr
+    environment:
+      DB_HOST: db
+      SOLR_HOST: solr
+    restart: unless-stopped
+    ports:
+      - "1337:1337"
+      - "8101:8101"
+      - "9090:9090"
+    volumes:
+      - portal:/opt/intrexx/org
+
+
+  # nginx:
+  #   depends_on:
+  #     - intrexx
+  #   image: nginx:1.19
+  #   container_name: nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./resource/nginx/conf.d:/etc/nginx/conf.d:ro
+  #     - ./resource/nginx/ssl/template.unitedplanet.de:/etc/ssl/template.unitedplanet.de:ro
+
+volumes:
+  portal:
+  intrexx-db-data:
