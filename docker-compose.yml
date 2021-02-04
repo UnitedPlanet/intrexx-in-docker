@@ -30,28 +30,34 @@ services:
     environment:
       DB_HOST: db
       SOLR_HOST: solr
+      PORTAL_NAME: portal
+      PORTAL_ZIP_NAME: portal-template.zip
+      PORTAL_ZIP_MNTPT: /opt/intrexx/org
+      DB_NAME: ixportal
+      DB_USER: postgres
+      DB_PASSWORD: .admin1
     restart: unless-stopped
     ports:
       - "1337:1337"
       - "8101:8101"
       - "9090:9090"
     volumes:
-      - portal:/opt/intrexx/org
-
+      - portal-data:/opt/intrexx/org
 
   # nginx:
   #   depends_on:
   #     - intrexx
   #   image: nginx:1.19
-  #   container_name: nginx
   #   restart: unless-stopped
   #   ports:
   #     - "80:80"
   #     - "443:443"
   #   volumes:
   #     - ./resource/nginx/conf.d:/etc/nginx/conf.d:ro
-  #     - ./resource/nginx/ssl/template.unitedplanet.de:/etc/ssl/template.unitedplanet.de:ro
+  #     - ./resource/nginx/ssl/example.unitedplanet.de:/etc/ssl/example.unitedplanet.de:ro
+  #     - portal-data:/opt/intrexx/org
+
 
 volumes:
-  portal:
+  portal-data:
   intrexx-db-data:
