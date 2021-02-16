@@ -30,6 +30,7 @@ services:
     environment:
       DB_HOST: db
       SOLR_HOST: solr
+      SOLR_SASL_DISABLED: "true"
       PORTAL_NAME: portal
       PORTAL_ZIP_NAME: portal-template.zip
       PORTAL_ZIP_MNTPT: /opt/intrexx/org
