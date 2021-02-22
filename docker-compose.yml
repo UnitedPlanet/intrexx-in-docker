@@ -15,11 +15,16 @@ services:
 
   solr:
     image: solr:8.4.1
+    environment:
+      # https://github.com/apache/lucene-solr/blob/master/solr/docker/Docker-FAQ.md
+      SOLR_OPTS: -XX:-UseLargePages
     restart: unless-stopped
     ports:
      - "8984:8983"
      - "9984:9983"
     command: -c
+    volumes:
+     - intrexx-solr-data:/var/solr
 
 
   intrexx:
@@ -62,3 +67,4 @@ services:
 volumes:
   portal-data:
   intrexx-db-data:
+  intrexx-solr-data:
