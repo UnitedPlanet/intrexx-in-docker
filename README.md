@@ -169,8 +169,8 @@ docker-compose logs -f
 Alternatively, the separate logs are available directly from the containers via
 
 ```bash
-docker-compose logs [intrexx|db|solr|nginx] -f
-# e.g.: docker-compose logs intrexx -f
+docker-compose logs -f [intrexx|db|solr|nginx]
+# e.g.: docker-compose logs -f intrexx
 ```
 
 ## Can I use another database type?
