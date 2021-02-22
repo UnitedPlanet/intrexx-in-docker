@@ -179,4 +179,4 @@ Currently, only PostgreSQL is supported out of the box. While it is possible to 
 
 ## Can I use this in production?
 
-In principle, yes. However, since this is the first version of Intrexx that is deployable in Docker, we currently can not guarantee that there will be no issues. However, we offer full support when encountering problems caused from our side in the deployment of Intrexx in Docker. We continue to work steadily on improving our scripts in order to enable a deployment that runs as smooth as possible.
+Generally yes. However, since this is the first version of Intrexx that is deployable in Docker, we currently can not guarantee that there will be no issues. However, we offer full support when encountering problems caused from our side in the deployment of Intrexx in Docker. We continue to work steadily on improving our scripts in order to enable a deployment that runs as smooth as possible.
