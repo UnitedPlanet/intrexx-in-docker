@@ -146,6 +146,8 @@ So, for example, the semantic version of Intrexx 21.03 OU05 would be 10.0.5.
 
 Additionally for every major version, there is a specific latest tag, e.g. `21.03-latest`. This may be used to automatically receive the most recent patches but to avoid major version upgrades.
 
+Please refer to the [Docker Hub page](https://hub.docker.com/r/unitedplanet/intrexx) for a complete list of available tags.
+
 # FAQ
 
 ## Is this deployment scalable?
