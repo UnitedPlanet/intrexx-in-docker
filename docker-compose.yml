@@ -11,10 +11,15 @@ services:
       - "5434:5432"
     volumes:
       - intrexx-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 
   solr:
-    image: solr:8.4.1
+    image: solr:8.7.0
     environment:
       # https://github.com/apache/lucene-solr/blob/master/solr/docker/Docker-FAQ.md
       SOLR_OPTS: -XX:-UseLargePages
@@ -30,8 +35,10 @@ services:
   intrexx:
     image: unitedplanet/intrexx:21.03-latest
     depends_on:
-      - db
-      - solr
+      db:
+        condition: service_healthy
+      solr:
+        condition: service_started
     environment:
       DB_HOST: db
       SOLR_HOST: solr
