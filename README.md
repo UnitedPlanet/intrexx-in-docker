@@ -109,7 +109,7 @@ If you want to use nginx as a frontend webserver and thereby enable SSL encrypti
 
 In both cases you follow these steps:
 
-- In the `docker-compose.yml` enable the commented lines for the nginx service. Please be aware of the correct indentation so that `nginx` is recognied as an additional container.
+- In the `docker-compose.yml` enable the commented lines for the nginx service. Please be aware of the correct indentation so that `nginx` is recognied as an additional container. Also adjust the `PORTAL_BASE_URL` environmen variable.
 - Within the directory `resource/nginx/ssl/<Your server's DNS>` provide the needed certificate files and a DH param file for your server.
 - Within the files `docker-compose.yml` and `resource/nginx/conf.d/default.conf` replace all occurences of `example.unitedplanet.de` with your desired DNS.
 - If you changed the portal name (by modifying the EVN Var PORTAL_NAME) also adjust the htmlroot path in `resource/nginx/conf.d/default.conf`.

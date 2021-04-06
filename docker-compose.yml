@@ -44,6 +44,7 @@ services:
       SOLR_HOST: solr
       SOLR_SASL_DISABLED: "true"
       PORTAL_NAME: portal
+      PORTAL_BASE_URL: http://localhost:1337/
       PORTAL_ZIP_NAME: portal-template.zip
       PORTAL_ZIP_MNTPT: /opt/intrexx/org
       DB_NAME: ixportal
