@@ -1,6 +1,6 @@
 # Intrexx in Docker
 
-__ATTENTION:__ Until Intrexx 21.03 is officially released, please refer to the Docker Hub page, for preview image names.
+__ATTENTION:__ Please refer to the Docker Hub page, for a list of available image names.
 
 Intrexx in Docker creates an enseble of containes to host an Intrexx instace plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool.
 
