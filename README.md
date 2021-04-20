@@ -2,7 +2,7 @@
 
 __ATTENTION:__ Please refer to the Docker Hub page, for a list of available image names.
 
-Intrexx in Docker creates an enseble of containes to host an Intrexx instace plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool.
+Intrexx in Docker creates an ensemble of contains to host an Intrexx instance plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool.
 
 There are four use-cases:
 
@@ -36,7 +36,7 @@ This will create three containers: database, solr server and portal. The portal 
 
 ## Create new portal from export
 
-Many users might already have a portal (export) that they wish to deploy in Docker. To archieve that, the portal must be provided in zip format.
+Many users might already have a portal (export) that they wish to deploy in Docker. To achieve that, the portal must be provided in zip format.
 
 As described above, the portal directory (/opt/intrexx/org) is a named volume in the Docker Compose deployment. If a portal zip is provided within this volume, it is used as template for portal creation, instead of the blank portal. This workflow however requires for the volume to be a mounted directory from the host system instead.
 
@@ -54,7 +54,7 @@ intrexx:
     - /portal/dir/on/local/system:/opt/intrexx/org
 ```
 
-If this is not wanted, an additional volume can be configured, containing only the portal zip and mounted into the Intrexx container. In this case, the (absolute) path to mountpoint within the container must be provided as environment variable (PORTAL_ZIP_MNTPT). The docker-compose.yml must then be adjusted as follows:
+If this is not wanted, an additional volume can be configured, containing only the portal zip and mounted into the Intrexx container. In this case, the (absolute) path to mount point within the container must be provided as environment variable (PORTAL_ZIP_MNTPT). The docker-compose.yml must then be adjusted as follows:
 
 ```yml
 # Case 2 (portal is provided from additional volume)
@@ -109,9 +109,9 @@ If you want to use nginx as a frontend webserver and thereby enable SSL encrypti
 
 In both cases you follow these steps:
 
-- In the `docker-compose.yml` enable the commented lines for the nginx service. Please be aware of the correct indentation so that `nginx` is recognied as an additional container. Also adjust the `PORTAL_BASE_URL` environmen variable.
+- In the `docker-compose.yml` enable the commented lines for the nginx service. Please be aware of the correct indentation so that `nginx` is recognized as an additional container. Also adjust the `PORTAL_BASE_URL` environment variable.
 - Within the directory `resource/nginx/ssl/<Your server's DNS>` provide the needed certificate files and a DH param file for your server.
-- Within the files `docker-compose.yml` and `resource/nginx/conf.d/default.conf` replace all occurences of `example.unitedplanet.de` with your desired DNS.
+- Within the files `docker-compose.yml` and `resource/nginx/conf.d/default.conf` replace all occurrences of `example.unitedplanet.de` with your desired DNS.
 - If you changed the portal name (by modifying the EVN Var PORTAL_NAME) also adjust the htmlroot path in `resource/nginx/conf.d/default.conf`.
 
 If the portal is contained in the separate portal-data volume (case 2 above), you are done now. If you mounted the portal from a local directory instead (case 1 above), adjust the volume definition in the nginx service in `docker-compose.yml` as well:
