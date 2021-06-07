@@ -23,6 +23,15 @@ In order to follow these guidelines, you need to have Docker and Docker Compose 
 - [Docker Compose installation](https://docs.docker.com/compose/install/)
 
 # Usage
+First clone this repository anywhere on your machine:
+```
+git clone https://github.com/UnitedPlanet/intrexx-in-docker
+```
+Then create an .env file in the directory where the docker-compose.yml is located:
+```
+cp .env.example .env
+```
+Optionally, user-defined settings can now be made by adjusting the values of the variables in the .env file accordingly. This includes e.g. the versions of services, the binding of the container ports to the host, the definition of the portal name, the database user and password, etc.
 
 ## Create new (blank) portal
 
@@ -40,34 +49,30 @@ Many users might already have a portal (export) that they wish to deploy in Dock
 
 As described above, the portal directory (/opt/intrexx/org) is a named volume in the Docker Compose deployment. If a portal zip is provided within this volume, it is used as template for portal creation, instead of the blank portal. This workflow however requires for the volume to be a mounted directory from the host system instead.
 
-To mount the the directory on the host system, the docker-compose.yml must be adjusted as follows:
+In order to make this work at least the two variables `IX_PORTAL_ZIP_NAME` and `IX_PORTAL_DIR_HOST` must be specified via the .env file. In addition, the docker-compose.yml must be adapted as follows:
 
 ```yml
 # Case 1 (portal is provided from mounted host directory)
 
 intrexx:
   ...
-  environment:
-    PORTAL_ZIP_NAME: my_portal.zip
-  ...
-  volumes:
-    - /portal/dir/on/local/system:/opt/intrexx/org
+    volumes:
+#      - portal-data:/opt/intrexx/org
+      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+#      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
 ```
 
-If this is not wanted, an additional volume can be configured, containing only the portal zip and mounted into the Intrexx container. In this case, the (absolute) path to mount point within the container must be provided as environment variable (PORTAL_ZIP_MNTPT). The docker-compose.yml must then be adjusted as follows:
+If you don't want to bind-mount /opt/intrexx/org to `IX_PORTAL_DIR_HOST` on the host and /opt/intrexx/org in the container should still be within a named volume, you can use an additional volume containing only the portal zip. In this case, the (absolute) path to mount point within the container must be provided via the .env file (`IX_PORTAL_ZIP_MNTPT`). The docker-compose.yml must then be adjusted as follows:
 
 ```yml
 # Case 2 (portal is provided from additional volume)
 
 intrexx:
   ...
-  environment:
-    PORTAL_ZIP_NAME: my_portal.zip
-    PORTAL_ZIP_MNTPT: /tmp/templates
-  ...
-  volumes:
-    - portal-data:/opt/intrexx/org
-    - /portal/dir/on/local/system:/tmp/templates
+    volumes:
+      - portal-data:/opt/intrexx/org
+#      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
 
 ```
 
@@ -92,7 +97,7 @@ docker-compose down
 
 ## Upgrade deployment
 
-To update to a newer version of Intrexx, optionally configure the desired version in the docker-compose.yml or leave as is, to use the latest available version. Then run these commands:
+To update to a newer version of Intrexx, optionally configure the desired version in the .env file or leave as is, to use the latest available version. Then run these commands:
 
 ```bash
 docker-compose down

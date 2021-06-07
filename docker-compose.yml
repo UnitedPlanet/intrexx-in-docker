@@ -2,38 +2,37 @@ version: "3"
 services:
 
   db:
-    image: postgres:11-alpine
+    image: postgres:${PG_VERSION}
     environment:
-      POSTGRES_PASSWORD: .admin1
-      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_USER: ${PG_USER}
     restart: unless-stopped
     ports:
-      - "5434:5432"
+      - "${PG_HOST_PORT}:5432"
     volumes:
       - intrexx-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER}"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 
   solr:
-    image: solr:8.7.0
+    image: solr:${SOLR_VERSION}
     environment:
-      # https://github.com/apache/lucene-solr/blob/master/solr/docker/Docker-FAQ.md
-      SOLR_OPTS: -XX:-UseLargePages
+      SOLR_OPTS: ${SOLR_OPTS}
     restart: unless-stopped
     ports:
-     - "8984:8983"
-     - "9984:9983"
+     - "${SOLR_HOST_PORT}:8983"
+     - "${SOLR_EMBEDDED_ZOOKEEPER_HOST_PORT}:9983"
     command: -c
     volumes:
      - intrexx-solr-data:/var/solr
 
 
   intrexx:
-    image: unitedplanet/intrexx:21.03-latest
+    image: unitedplanet/intrexx:${IX_VERSION}
     depends_on:
       db:
         condition: service_healthy
@@ -43,20 +42,22 @@ services:
       DB_HOST: db
       SOLR_HOST: solr
       SOLR_SASL_DISABLED: "true"
-      PORTAL_NAME: portal
+      PORTAL_NAME: ${IX_PORTAL_NAME}
       PORTAL_BASE_URL: http://localhost:1337/
-      PORTAL_ZIP_NAME: portal-template.zip
-      PORTAL_ZIP_MNTPT: /opt/intrexx/org
-      DB_NAME: ixportal
-      DB_USER: postgres
-      DB_PASSWORD: .admin1
+      PORTAL_ZIP_NAME: ${IX_PORTAL_ZIP_NAME:-portal-template.zip}
+      PORTAL_ZIP_MNTPT: ${IX_PORTAL_ZIP_MNTPT:-/opt/intrexx/org}
+      DB_NAME: ${IX_DB_NAME}
+      DB_USER: ${PG_USER}
+      DB_PASSWORD: ${PG_PASSWORD}
     restart: unless-stopped
     ports:
-      - "1337:1337"
-      - "8101:8101"
-      - "9090:9090"
+      - "${IX_WEBCONNECTOR_HOST_PORT}:1337"
+      - "${IX_REST_HOST_PORT}:8101"
+      - "${IX_ODATA_HOST_PORT}:9090"
     volumes:
       - portal-data:/opt/intrexx/org
+#      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+#      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
 
   # nginx:
   #   depends_on:
