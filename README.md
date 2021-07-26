@@ -11,8 +11,6 @@ There are four use-cases:
 3. If the portal volume contains a portal of the current version, it is started.
 4. If the portal is not yet of the current version, it is patched and then started.
 
-Case 4 is not implemented yet.
-
 # Prerequisites
 
 In order to deploy Intrexx as a Docker container, we use [docker-compose](https://docs.docker.com/compose/). This is done, because Intrexx can not be run as a standalone container but needs a database and a search server to work correctly. Optionally, an nginx server can be useful as reverse proxy. Managing the deployment as a whole is enabled by docker-compose.
