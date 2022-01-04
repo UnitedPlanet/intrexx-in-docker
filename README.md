@@ -151,6 +151,23 @@ Additionally for every major version, there is a specific latest tag, e.g. `21.0
 
 Please refer to the [Docker Hub page](https://hub.docker.com/r/unitedplanet/intrexx) for a complete list of available tags.
 
+# List of environment vars
+Name | Default value | Description
+--- | --- | ---
+`PORTAL_NAME` | portal | The name of the portal.
+`PORTAL_BASE_URL` | http://localhost:1337/ | The base URL of the portal.
+`DB_HOST` | db | Hostname of the database server.
+`DB_PORT` | 5432 | Port of the database.
+`DB_NAME` | ixportal | Name of the database.
+`DB_USER` | postgres | Username for database authentication.
+`DB_PASSWORD` | .admin1 | Password for database authentication.
+`SOLR_HOST` | solr | Hostname of the SOLR zookeeper server.
+`SOLR_PORT` | 9983 | Port of the SOLR zookeeper.
+`SOLR_SASL_DISABLED` | true | If SOLR is run without SASL, this parameter adjusts the intrexx search client accordingly.
+`TEMPLATE_PATH` | /opt/intrexx/orgtempl/blank | The directory ultimately used as the portal template. **ATTENTION** In most cases this does not need to be adjusted, because it is adjusted by the entrypoint skript, if a portal template is provided by zip file.
+`PORTAL_ZIP_NAME` | portal-template.zip | Optional name of the portal export zip, that should be used as a template.
+`PORTAL_ZIP_MNTPT` | /opt/intrexx/org | Optional mountpoint of a volume containing the export zip in the container. 
+
 # FAQ
 
 ## Is this deployment scalable?
