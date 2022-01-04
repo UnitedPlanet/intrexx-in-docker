@@ -156,6 +156,7 @@ Name | Default value | Description
 --- | --- | ---
 `PORTAL_NAME` | portal | The name of the portal.
 `PORTAL_BASE_URL` | http://localhost:1337/ | The base URL of the portal.
+`DB_CREATE` | true | Create a new DB (true) or use existing (false). Available from version 10.0.10 and 10.4.0 onwards
 `DB_HOST` | db | Hostname of the database server.
 `DB_PORT` | 5432 | Port of the database.
 `DB_NAME` | ixportal | Name of the database.
