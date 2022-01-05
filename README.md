@@ -138,7 +138,7 @@ docker-compose start nginx
 If the deployment is not already running, use `docker-compose up -d` instead as above and the NGINX service will be started alongside your deployment.
 
 ## Custom configuration work
-Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization skripts, placed under `/entrypoint.d/`. Any `*.sh` skript found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization skripts are already stored there in the original image provided by united planet. Instead use a Dockerfile and the COPY command, to store your skripts in the directory.
+Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by united planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
 
 # Tags
 
