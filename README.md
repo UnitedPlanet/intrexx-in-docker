@@ -137,6 +137,9 @@ docker-compose start nginx
 
 If the deployment is not already running, use `docker-compose up -d` instead as above and the NGINX service will be started alongside your deployment.
 
+## Custom configuration work
+Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization skripts, placed under `/entrypoint.d/`. Any `*.sh` skript found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization skripts are already stored there in the original image provided by united planet. Instead use a Dockerfile and the COPY command, to store your skripts in the directory.
+
 # Tags
 
 The Intrexx images are tagged with the semantic version of the release. The semantic version contains 3 parts:
@@ -156,7 +159,7 @@ Name | Default value | Description
 --- | --- | ---
 `PORTAL_NAME` | portal | The name of the portal.
 `PORTAL_BASE_URL` | http://localhost:1337/ | The base URL of the portal.
-`DB_CREATE` | true | Create a new DB (true) or use existing (false). Available from version 10.0.10 and 10.4.0 onwards
+`DB_CREATE` | true | Create a new DB (true) or use existing (false). Available from version 10.0.10 and 10.4.0 onwards.
 `DB_HOST` | db | Hostname of the database server.
 `DB_PORT` | 5432 | Port of the database.
 `DB_NAME` | ixportal | Name of the database.
@@ -168,6 +171,17 @@ Name | Default value | Description
 `TEMPLATE_PATH` | /opt/intrexx/orgtempl/blank | The directory ultimately used as the portal template. **ATTENTION** In most cases this does not need to be adjusted, because it is adjusted by the entrypoint skript, if a portal template is provided by zip file.
 `PORTAL_ZIP_NAME` | portal-template.zip | Optional name of the portal export zip, that should be used as a template.
 `PORTAL_ZIP_MNTPT` | /opt/intrexx/org | Optional mountpoint of a volume containing the export zip in the container. 
+`TOMCAT_SEC_HEADER_XUSER` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XDOMAIN` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XKRBTICKET` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XACCOUNTNAME` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XFORWARDEDFOR` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_FORWARDED` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XREALIP` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XFORWARDEDHOST` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XFORWARDEDPROTO` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_XORIGINALURL` | deny | Can be set to allow to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
+`TOMCAT_SEC_HEADER_RECEIVEONNONLOOPBACKINTERFACE` | false | Can be set to true to change the according value in the web.xml. Available from version 10.0.10 and 10.4.0 onwards.
 
 # FAQ
 
