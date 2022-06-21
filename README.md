@@ -2,7 +2,7 @@
 
 __ATTENTION:__ Please refer to the Docker Hub page, for a list of available image names.
 
-Intrexx in Docker creates an ensemble of contains to host an Intrexx instance plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool.
+Intrexx in Docker creates an ensemble of containers to host an Intrexx instance plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool.
 
 There are four use-cases:
 
@@ -13,7 +13,7 @@ There are four use-cases:
 
 # Prerequisites
 
-In order to deploy Intrexx as a Docker container, we use [docker-compose](https://docs.docker.com/compose/). This is done, because Intrexx can not be run as a standalone container but needs a database and a search server to work correctly. Optionally, an nginx server can be useful as reverse proxy. Managing the deployment as a whole is enabled by docker-compose.
+In order to deploy Intrexx as a Docker container, we use [docker-compose](https://docs.docker.com/compose/). This is done, because Intrexx can not be run as a standalone container but needs a database and a search server to work correctly. Optionally, an Nginx server can be useful as reverse proxy. Managing the deployment as a whole is enabled by Docker Compose.
 
 In order to follow these guidelines, you need to have Docker and Docker Compose configured on your machine. Please follow the official installation guidelines:
 
@@ -36,10 +36,10 @@ Optionally, user-defined settings can now be made by adjusting the values of the
 This is the most simple use-case. No changes are needed. Just run
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-This will create three containers: database, solr server and portal. The portal directory will be created in a named Docker volume. This may be used to backup data but also persists the portal between upgrades.
+This will create three containers: database, Solr server and portal. The portal directory will be created in a named Docker volume. This may be used to backup data but also persists the portal between upgrades.
 
 ## Create new portal from export
 
@@ -77,7 +77,7 @@ intrexx:
 In both cases, the portal can again be started by running
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Destroy deployment
@@ -85,12 +85,12 @@ docker-compose up -d
 To completely destroy a deployment, use
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 __Attention:__ This will also remove the Docker volumes so no data is left! To stop the volumes without removing them (so they can be restarted), use
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## Upgrade deployment
@@ -98,26 +98,26 @@ docker-compose down
 To update to a newer version of Intrexx, optionally configure the desired version in the .env file or leave as is, to use the latest available version. Then run these commands:
 
 ```bash
-docker-compose down
-docker-compose pull
-docker-compose up
+docker compose down
+docker compose pull
+docker compose up
 ```
 
 By doing so, the Intrexx container will be destroyed, the image updated and started again as a new Intrexx container. Meanwhile the volume persists. On startup the already present portal is detected, patched to the new Intrexx version and started.
 Please be aware that the startup may take extended time because of the required portal patch.
 
-## Configure nginx as reverse proxy
+## Configure Nginx as reverse proxy
 
-If you want to use nginx as a frontend webserver and thereby enable SSL encryption, the procedure depends on whether the portal is directly mounted from the host machine or contained in an extra volume.
+If you want to use Nginx as a frontend webserver and thereby enable SSL encryption, the procedure depends on whether the portal is directly mounted from the host machine or contained in an extra volume.
 
 In both cases you follow these steps:
 
-- In the `docker-compose.yml` enable the commented lines for the nginx service. Please be aware of the correct indentation so that `nginx` is recognized as an additional container. Also adjust the `PORTAL_BASE_URL` environment variable.
-- Within the directory `resource/nginx/ssl/<Your server's DNS>` provide the needed certificate files and a DH param file for your server.
+- In the `docker-compose.yml` enable the commented lines for the Nginx service. Please be aware of the correct indentation so that `nginx` is recognized as an additional container. Also adjust the `PORTAL_BASE_URL` environment variable.
+- Within the directory `resource/nginx/ssl/<Your server's DNS>` provide the necessary certificate files and a DH param file for your server.
 - Within the files `docker-compose.yml` and `resource/nginx/conf.d/default.conf` replace all occurrences of `example.unitedplanet.de` with your desired DNS.
 - If you changed the portal name (by modifying the EVN Var PORTAL_NAME) also adjust the htmlroot path in `resource/nginx/conf.d/default.conf`.
 
-If the portal is contained in the separate portal-data volume (case 2 above), you are done now. If you mounted the portal from a local directory instead (case 1 above), adjust the volume definition in the nginx service in `docker-compose.yml` as well:
+If the portal is contained in the separate portal-data volume (case 2 above), you are done now. If you mounted the portal from a local directory instead (case 1 above), adjust the volume definition in the Nginx service in `docker-compose.yml` as well:
 
 ```yml
 
@@ -128,17 +128,17 @@ nginx:
     - /portal/dir/on/local/system:/opt/intrexx/org
 ```
 
-If your deployment is already running, you may now use the following commands to start your NGINX frontend:
+If your deployment is already running, you may now use the following commands to start your Nginx frontend:
 
 ```bash
-docker-compose up --no-start nginx
-docker-compose start nginx
+docker compose up --no-start nginx
+docker compose start nginx
 ```
 
-If the deployment is not already running, use `docker-compose up -d` instead as above and the NGINX service will be started alongside your deployment.
+If the deployment is not already running, use `docker compose up -d` instead as above and the Nginx service will be started alongside your deployment.
 
 ## Custom configuration work
-Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by united planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
+Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by United Planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
 
 # Tags
 
@@ -202,14 +202,14 @@ As there is only one portal per deployment, a supervisor is not necessary and th
 A combined log from all containers can be obtained from Docker compose directly via
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 Alternatively, the separate logs are available directly from the containers via
 
 ```bash
-docker-compose logs -f [intrexx|db|solr|nginx]
-# e.g.: docker-compose logs -f intrexx
+docker compose logs -f [intrexx|db|solr|nginx]
+# e.g.: docker compose logs -f intrexx
 ```
 
 ## Can I use another database type?
@@ -219,3 +219,4 @@ Currently, only PostgreSQL is supported out of the box. While it is possible to 
 ## Can I use this in production?
 
 Generally yes. However, since this is the first version of Intrexx that is deployable in Docker, we currently can not guarantee that there will be no issues. However, we offer full support when encountering problems caused from our side in the deployment of Intrexx in Docker. We continue to work steadily on improving our scripts in order to enable a deployment that runs as smooth as possible.
+
