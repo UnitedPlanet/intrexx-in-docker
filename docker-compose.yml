@@ -59,6 +59,11 @@ services:
       - portal-data:/opt/intrexx/org
 #      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
 #      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f localhost:1337/service/ping/"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
 
   # nginx:
   #   depends_on:
