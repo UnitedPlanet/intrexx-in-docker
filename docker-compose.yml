@@ -76,7 +76,6 @@ services:
   #   volumes:
   #     - ./resource/nginx/conf.d:/etc/nginx/conf.d:ro
   #     - ./resource/nginx/ssl/example.unitedplanet.de:/etc/ssl/example.unitedplanet.de:ro
-  #     - portal-data:/opt/intrexx/org
 
 
 volumes:
