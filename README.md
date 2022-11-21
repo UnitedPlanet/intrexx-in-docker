@@ -141,7 +141,7 @@ If the deployment is not already running, use `docker compose up -d` instead as 
 Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by United Planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
 
 # Distributed mode (horizontal scaling)
-It is possible, to start the deployment in distributed mode. For this, a few adjustments in the `.env` file need to be made and a load balancer is needed.
+It is possible, to start the deployment in distributed mode when on version 10.15.0 or above. For this, a few adjustments in the `.env` file need to be made and a load balancer is needed.
 
 All forementioned use cases apply for distributed use in the same way. In both cases (standalone and distributed) a init container is used to prepare the portal.
 
@@ -204,7 +204,7 @@ Name | Default value | Description
 
 ## Is this deployment scalable?
 
-Yes. See above on how.
+Yes, starting with version 10.15.0. See above on how.
 
 ## Can I have multiple portals?
 
