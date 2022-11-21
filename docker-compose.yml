@@ -30,8 +30,9 @@ services:
     volumes:
      - intrexx-solr-data:/var/solr
 
+
   intrexx-init:
-    image: unitedplanet/intrexx-dev:steady-trunk-dev-latest
+    image: unitedplanet/intrexx:${IX_VERSION}
     command: "echo done"
     depends_on:
       db:
@@ -52,7 +53,6 @@ services:
       DB_PASSWORD: ${PG_PASSWORD}
       IX_DISTRIBUTED: ${IX_DISTRIBUTED}
     volumes:
-    volumes:
       - portal-data:/opt/intrexx/org
       - intrexx-cfg:/opt/intrexx/cfg
 #      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
@@ -60,9 +60,9 @@ services:
 
 
   intrexx:
-#    deploy:
-#      mode: replicated
-#      replicas: 3
+    deploy:
+      mode: ${IX_DEPLOY_MODE}
+      replicas: ${IX_DEPLOY_REPLICATIONS}
     image: unitedplanet/intrexx:${IX_VERSION}
     depends_on:
       db:
@@ -83,7 +83,7 @@ services:
       DB_NAME: ${IX_DB_NAME}
       DB_USER: ${PG_USER}
       DB_PASSWORD: ${PG_PASSWORD}
-      IX_DISTRIBUTED: IX_DISTRIBUTED
+      IX_DISTRIBUTED: ${IX_DISTRIBUTED}
       IX_DISTRIBUTED_NODELIST: ${IX_DISTRIBUTED_NODELIST}
     restart: unless-stopped
     ports:
@@ -94,12 +94,12 @@ services:
       - portal-data:/opt/intrexx/org
       - intrexx-cfg:/opt/intrexx/cfg
 #      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
-#      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
     healthcheck:
       test: ["CMD-SHELL", "curl -f localhost:1337/service/ping/"]
       interval: 5s
       timeout: 5s
       retries: 60
+
 
 # # Loadbalancer for distributed
 #  nginx:
