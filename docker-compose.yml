@@ -30,14 +30,47 @@ services:
     volumes:
      - intrexx-solr-data:/var/solr
 
+  intrexx-init:
+    image: unitedplanet/intrexx-dev:steady-trunk-dev-latest
+    command: "echo done"
+    depends_on:
+      db:
+        condition: service_healthy
+      solr:
+        condition: service_started
+    environment:
+      DB_HOST: db
+      SOLR_HOST: solr
+      SOLR_PORT: 9983
+      SOLR_SASL_DISABLED: "true"
+      PORTAL_NAME: ${IX_PORTAL_NAME}
+      PORTAL_BASE_URL: ${IX_PORTAL_BASE_URL}
+      PORTAL_ZIP_NAME: ${IX_PORTAL_ZIP_NAME:-portal-template.zip}
+      PORTAL_ZIP_MNTPT: ${IX_PORTAL_ZIP_MNTPT:-/opt/intrexx/org}
+      DB_NAME: ${IX_DB_NAME}
+      DB_USER: ${PG_USER}
+      DB_PASSWORD: ${PG_PASSWORD}
+      IX_DISTRIBUTED: ${IX_DISTRIBUTED}
+    volumes:
+    volumes:
+      - portal-data:/opt/intrexx/org
+      - intrexx-cfg:/opt/intrexx/cfg
+#      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+#      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
+
 
   intrexx:
+#    deploy:
+#      mode: replicated
+#      replicas: 3
     image: unitedplanet/intrexx:${IX_VERSION}
     depends_on:
       db:
         condition: service_healthy
       solr:
         condition: service_started
+      intrexx-init:
+        condition: service_completed_successfully
     environment:
       DB_HOST: db
       SOLR_HOST: solr
@@ -50,6 +83,8 @@ services:
       DB_NAME: ${IX_DB_NAME}
       DB_USER: ${PG_USER}
       DB_PASSWORD: ${PG_PASSWORD}
+      IX_DISTRIBUTED: IX_DISTRIBUTED
+      IX_DISTRIBUTED_NODELIST: ${IX_DISTRIBUTED_NODELIST}
     restart: unless-stopped
     ports:
       - "${IX_WEBCONNECTOR_HOST_PORT}:1337"
@@ -57,6 +92,7 @@ services:
       - "${IX_ODATA_HOST_PORT}:9090"
     volumes:
       - portal-data:/opt/intrexx/org
+      - intrexx-cfg:/opt/intrexx/cfg
 #      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
 #      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
     healthcheck:
@@ -65,20 +101,32 @@ services:
       timeout: 5s
       retries: 60
 
-  # nginx:
-  #   depends_on:
-  #     - intrexx
-  #   image: nginx:1.19
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - ./resource/nginx/conf.d:/etc/nginx/conf.d:ro
-  #     - ./resource/nginx/ssl/example.unitedplanet.de:/etc/ssl/example.unitedplanet.de:ro
+# # Loadbalancer for distributed
+#  nginx:
+#    image: nginx:latest
+#    volumes:
+#      - ./resource/nginx/distributed.conf:/etc/nginx/conf:ro
+#    depends_on:
+#      - intrexx
+#    ports:
+#      - "1337:1337"
+
+# # Reverse proxy for standalone
+#  nginx:
+#    depends_on:
+#      - intrexx
+#    image: nginx:1.19
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./resource/nginx/conf.d:/etc/nginx/conf.d:ro
+#      - ./resource/nginx/ssl/example.unitedplanet.de:/etc/ssl/example.unitedplanet.de:ro
 
 
 volumes:
   portal-data:
   intrexx-db-data:
   intrexx-solr-data:
+  intrexx-cfg:
