@@ -183,6 +183,8 @@ Name | Default value | Description
 `IX_DISTRIBUTED` | false | If Intrexx should run in distributed mode (horizontal scaling).
 `IX_DISTRIBUTED_NODELIST` | "" | List of all nodes in a distributed cluster. Either DNS (or container names) or IP.
 `SOLR_HOST` | solr | Hostname of the SOLR zookeeper server.
+`SOLR_USER` | solr | Username for zookeeper connection.
+`SOLR_PASSWORD` | SolrRocks | Password for zookeeper connection.
 `SOLR_PORT` | 9983 | Port of the SOLR zookeeper.
 `SOLR_SASL_DISABLED` | true | If SOLR is run without SASL, this parameter adjusts the intrexx search client accordingly.
 `TEMPLATE_PATH` | /opt/intrexx/orgtempl/blank | The directory ultimately used as the portal template. **ATTENTION** In most cases this does not need to be adjusted, because it is adjusted by the entrypoint skript, if a portal template is provided by zip file.
