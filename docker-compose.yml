@@ -1,6 +1,7 @@
 version: "3"
 services:
 
+  # The IX Database
   db:
     image: postgres:${PG_VERSION}
     environment:
@@ -17,32 +18,69 @@ services:
       timeout: 5s
       retries: 10
 
+  # Manages the Solr nodes and is used to connect to them
+  zookeeper:
+    image: zookeeper:${ZOOKEEPER_VERSION}
+    restart: unless-stopped
+    ports:
+      - ${ZOOKEEPER_PORT}:2181
+      - ${ZOOKEEPER_METRICS_PORT}:7000
+    environment:
+      ZOO_4LW_COMMANDS_WHITELIST: mntr, conf, ruok
 
-  solr:
+# Uploads the security.json to the zookeeper - there is actually no other way to do this
+  solr-init:
     image: solr:${SOLR_VERSION}
+    depends_on:
+      zookeeper:
+        condition: service_started
     environment:
       SOLR_OPTS: ${SOLR_OPTS}
+      ZK_HOST: zookeeper:${ZOOKEEPER_PORT}
+    ports:
+     - "${SOLR_HOST_PORT}:8983"
+    command: bash -c "bin/solr zk cp file:/var/solr/cfg/security.json zk:/security.json"
+    volumes:
+     - intrexx-solr-data:/var/solr
+     # security.json is world-readable --> secure?
+     # The hash needs to be computed using a tool like https://github.com/ansgarwiechers/solrpasswordhash
+     - ./resource/zookeeper/security.json:/var/solr/cfg/security.json:ro
+
+# A solr node in the "cluster"
+  solr:
+    image: solr:${SOLR_VERSION}
+    depends_on:
+      zookeeper:
+        condition: service_started
+      solr-init:
+        condition: service_completed_successfully
+    environment:
+      SOLR_OPTS: ${SOLR_OPTS}
+      ZK_HOST: zookeeper:${ZOOKEEPER_PORT}
     restart: unless-stopped
     ports:
      - "${SOLR_HOST_PORT}:8983"
-     - "${SOLR_EMBEDDED_ZOOKEEPER_HOST_PORT}:9983"
     command: -c
     volumes:
      - intrexx-solr-data:/var/solr
 
-
+# Creates or patches the portal
   intrexx-init:
-    image: unitedplanet/intrexx:${IX_VERSION}
+    image: unitedplanet/${IX_REPO}:${IX_VERSION}
     command: "echo done"
     depends_on:
       db:
         condition: service_healthy
       solr:
         condition: service_started
+      zookeeper:
+        condition: service_started
     environment:
       DB_HOST: db
-      SOLR_HOST: solr
-      SOLR_PORT: 9983
+      SOLR_HOST: zookeeper
+      SOLR_PORT: 2181
+      SOLR_USER: ${SOLR_USER}
+      SOLR_PASSWORD: ${SOLR_PASSWORD}
       SOLR_SASL_DISABLED: "true"
       PORTAL_NAME: ${IX_PORTAL_NAME}
       PORTAL_BASE_URL: ${IX_PORTAL_BASE_URL}
@@ -58,23 +96,27 @@ services:
 #      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
 #      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
 
-
+  # The Intrexx instance(s) that run the portal
   intrexx:
     deploy:
       mode: ${IX_DEPLOY_MODE}
       replicas: ${IX_DEPLOY_REPLICATIONS}
-    image: unitedplanet/intrexx:${IX_VERSION}
+    image: unitedplanet/${IX_REPO}:${IX_VERSION}
     depends_on:
       db:
         condition: service_healthy
       solr:
         condition: service_started
+      zookeeper:
+        condition: service_started
       intrexx-init:
         condition: service_completed_successfully
     environment:
       DB_HOST: db
-      SOLR_HOST: solr
-      SOLR_PORT: 9983
+      SOLR_HOST: zookeeper
+      SOLR_PORT: 2181
+      SOLR_USER: ${SOLR_USER}
+      SOLR_PASSWORD: ${SOLR_PASSWORD}
       SOLR_SASL_DISABLED: "true"
       PORTAL_NAME: ${IX_PORTAL_NAME}
       PORTAL_BASE_URL: http://localhost:1337/
