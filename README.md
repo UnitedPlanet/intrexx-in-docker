@@ -152,6 +152,16 @@ The `IX_DEPLOY_MODE` needs to be switched from `global` to `replicated`. The des
 
 `IX_DISTRIBUTED` needs to be true and `IX_DISTRIBUTED_NODELIST` needs to hold a list of all cluster nodes. For the docker compose example this may be a list of container names as in the example value.
 
+## Port Binding
+If you want to bind the Web, REST and ODATA Ports to your host system, you need to provide port ranges, instead of concrete ports in the distributed case as shown in the `.env.example` file.
+Note that in some cases (Docker Desktop for Windows) Docker Compose incorrectly assumes ports as allocated. This issue can be resolved by either restarting the affected containers manually or changing the exposed ports to allocate any free port in the `docker-compose.yml` like so:
+```yaml
+    ports:
+      - "1337"
+      - "8101"
+      - "9090"
+```
+
 ## Load Balancing
 Any kind of loadbalancer may be used to distributed traffic between the cluster members. The most simple way is using an nginx as shown in the `docker-compose.yml`. Note that only 1 nginx service should be used but 2 examples are given.
 
