@@ -103,9 +103,9 @@ services:
 
 # # Loadbalancer for distributed
 #  nginx:
-#    image: nginx:latest
+#    image: nginx:${NGINX_VERSION}
 #    volumes:
-#      - ./resource/nginx/distributed.conf:/etc/nginx/conf:ro
+#      - ./resource/nginx/distributed/conf.d:/etc/nginx/conf.d:ro
 #    depends_on:
 #      - intrexx
 #    ports:
@@ -115,13 +115,13 @@ services:
 #  nginx:
 #    depends_on:
 #      - intrexx
-#    image: nginx:1.19
+#    image: nginx:${NGINX_VERSION}
 #    restart: unless-stopped
 #    ports:
 #      - "80:80"
 #      - "443:443"
 #    volumes:
-#      - ./resource/nginx/conf.d:/etc/nginx/conf.d:ro
+#      - ./resource/nginx/standalone/conf.d:/etc/nginx/conf.d:ro
 #      - ./resource/nginx/ssl/example.unitedplanet.de:/etc/ssl/example.unitedplanet.de:ro
 
 
