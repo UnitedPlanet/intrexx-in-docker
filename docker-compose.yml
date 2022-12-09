@@ -119,7 +119,7 @@ services:
       SOLR_PASSWORD: ${SOLR_PASSWORD}
       SOLR_SASL_DISABLED: "true"
       PORTAL_NAME: ${IX_PORTAL_NAME}
-      PORTAL_BASE_URL: http://localhost:1337/
+      PORTAL_BASE_URL: ${IX_PORTAL_BASE_URL}
       PORTAL_ZIP_NAME: ${IX_PORTAL_ZIP_NAME:-portal-template.zip}
       PORTAL_ZIP_MNTPT: ${IX_PORTAL_ZIP_MNTPT:-/opt/intrexx/org}
       DB_NAME: ${IX_DB_NAME}
