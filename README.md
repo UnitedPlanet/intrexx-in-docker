@@ -137,6 +137,9 @@ docker compose start nginx
 
 If the deployment is not already running, use `docker compose up -d` instead as above and the Nginx service will be started alongside your deployment.
 
+## Configure Solr credentials
+Solr expects the Solr user credentials to be provided as base64 encoded hash within the `security.json`. Because Solr is not very transparent on how to derive the password string, this demo deployment is not able to create it. A tool like [solrpasswordhash](https://github.com/ansgarwiechers/solrpasswordhash) could be used to generate the string and adjust the `security.json` accordingly. Otherwise the default credentials need to be used.
+
 ## Custom configuration work
 Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by United Planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
 
@@ -193,6 +196,8 @@ Name | Default value | Description
 `IX_DISTRIBUTED` | false | If Intrexx should run in distributed mode (horizontal scaling).
 `IX_DISTRIBUTED_NODELIST` | "" | List of all nodes in a distributed cluster. Either DNS (or container names) or IP.
 `SOLR_HOST` | solr | Hostname of the SOLR zookeeper server.
+`SOLR_USER` | solr | Username for zookeeper connection. Usually the default credentials need to be used. See section "Configure Solr credentials" above.
+`SOLR_PASSWORD` | SolrRocks | Password for zookeeper connection. Usually the default credentials need to be used. See section "Configure Solr credentials" above.
 `SOLR_PORT` | 9983 | Port of the SOLR zookeeper.
 `SOLR_SASL_DISABLED` | true | If SOLR is run without SASL, this parameter adjusts the intrexx search client accordingly.
 `TEMPLATE_PATH` | /opt/intrexx/orgtempl/blank | The directory ultimately used as the portal template. **ATTENTION** In most cases this does not need to be adjusted, because it is adjusted by the entrypoint skript, if a portal template is provided by zip file.
