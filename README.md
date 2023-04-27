@@ -143,19 +143,18 @@ Solr expects the Solr user credentials to be provided as base64 encoded hash wit
 Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by United Planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
 
 # Distributed mode (horizontal scaling)
-It is possible, to start the deployment in distributed mode when on version 10.15.0 or above. For this, a few adjustments in the `.env` file need to be made and a load balancer is needed.
+It is possible, to start the deployment in distributed mode when on version 10.15.0 or above. For this, use copy the `.env.cluster.example` file to `.env` and cp the `docker-compose-cluster.yaml` to `docker-compose.yaml`.
 
 All forementioned use cases apply for distributed use in the same way. In both cases (standalone and distributed) a init container is used to prepare the portal.
 
 Note that switching a deployment between standalone and distributed is not simply possible in any direction. If you need to do this, please export the portal and redeploy.
 
 ## Adjustments to enable distributed mode
-The `IX_DEPLOY_MODE` needs to be switched from `global` to `replicated`. The desired count of replications needs to be specified using `IX_DEPLOY_REPLICATIONS`.
-
-`IX_DISTRIBUTED` needs to be true and `IX_DISTRIBUTED_NODELIST` needs to hold a list of all cluster nodes. For the docker compose example this may be a list of container names as in the example value.
+`IX_DISTRIBUTED` is set to true and `IX_DISTRIBUTED_NODELIST` needs to hold a list of all cluster nodes. For the docker compose example this may be a list of container names as in the example value.
 
 ## Port Binding
-If you want to bind the Web, REST and ODATA Ports to your host system, you need to provide port ranges, instead of concrete ports in the distributed case as shown in the `.env.example` file.
+If you want to bind the Web, REST and ODATA Ports to your host system, you need to provide port ranges, instead of concrete ports in the distributed case as shown in the `.env.cluster.example` file.
+
 Note that in some cases (Docker Desktop for Windows) Docker Compose incorrectly assumes ports as allocated. This issue can be resolved by either restarting the affected containers manually or changing the exposed ports to allocate any free port in the `docker-compose.yml` like so:
 ```yaml
     ports:
@@ -165,7 +164,7 @@ Note that in some cases (Docker Desktop for Windows) Docker Compose incorrectly 
 ```
 
 ## Load Balancing
-Any kind of loadbalancer may be used to distributed traffic between the cluster members. The most simple way is using an nginx as shown in the `docker-compose.yml`. Note that only 1 nginx service should be used but 2 examples are given.
+A Traefik reverse proxy is deployed to distributed traffic between the cluster members. After all instances have been started you can access the portal with the URL `http://intrexx-in-docker.localhost:1337/`. The Traefik dashboard is also available under `http://localhost:8080/dashboard`.
 
 # Tags
 
