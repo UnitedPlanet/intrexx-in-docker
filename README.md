@@ -36,7 +36,7 @@ Optionally, user-defined settings can now be made by adjusting the values of the
 This is the most simple use-case. No changes are needed. Just run
 
 ```bash
-docker compose up -d
+docker compose up -d --always-recreate-deps
 ```
 
 This will create three containers: database, Solr server and portal. The portal directory will be created in a named Docker volume. This may be used to backup data but also persists the portal between upgrades.
@@ -77,7 +77,7 @@ intrexx:
 In both cases, the portal can again be started by running
 
 ```bash
-docker compose up -d
+docker compose up -d --always-recreate-deps
 ```
 
 ## Destroy deployment
@@ -98,9 +98,8 @@ docker compose down
 To update to a newer version of Intrexx, optionally configure the desired version in the .env file or leave as is, to use the latest available version. Then run these commands:
 
 ```bash
-docker compose down
 docker compose pull
-docker compose up
+docker compose up -d --always-recreate-deps
 ```
 
 By doing so, the Intrexx container will be destroyed, the image updated and started again as a new Intrexx container. Meanwhile the volume persists. On startup the already present portal is detected, patched to the new Intrexx version and started.
