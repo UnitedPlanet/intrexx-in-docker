@@ -146,7 +146,7 @@ Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provid
 It is possible, to start the deployment in distributed mode when on version 10.15.0 or above. For this, copy the `.env.cluster.example` file to `.env` and append the parameter `-f docker-compose-cluster.yaml` to the `docker compose` commands.
  
 ```bash
-docker compose up -d --always-recreate-deps -f docker-compose-cluster.yaml
+docker compose -f docker-compose-cluster.yaml up -d --always-recreate-deps 
 ```
 
 All forementioned use cases apply for distributed use in the same way. In both cases (standalone and distributed) a init container is used to prepare the portal.
