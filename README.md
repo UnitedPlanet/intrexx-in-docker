@@ -143,7 +143,11 @@ Solr expects the Solr user credentials to be provided as base64 encoded hash wit
 Starting with versions 10.0.10 and 10.4.0, it is possible for the user to provide additional initialization scripts, placed under `/entrypoint.d/`. Any `*.sh` script found there, will be executed by the `docker-entrypoint.sh` routine, right before the start of the portal. Please do not replace the entire directory as needed initialization scripts are already stored there in the original image provided by United Planet. Instead use a Dockerfile and the COPY command, to store your scripts in the directory.
 
 # Distributed mode (horizontal scaling)
-It is possible, to start the deployment in distributed mode when on version 10.15.0 or above. For this, use copy the `.env.cluster.example` file to `.env` and cp the `docker-compose-cluster.yaml` to `docker-compose.yaml`.
+It is possible, to start the deployment in distributed mode when on version 10.15.0 or above. For this, copy the `.env.cluster.example` file to `.env` and append the parameter `-f docker-compose-cluster.yaml` to the `docker compose` commands.
+ 
+```bash
+docker compose up -d --always-recreate-deps -f docker-compose-cluster.yaml
+```
 
 All forementioned use cases apply for distributed use in the same way. In both cases (standalone and distributed) a init container is used to prepare the portal.
 
@@ -164,7 +168,7 @@ Note that in some cases (Docker Desktop for Windows) Docker Compose incorrectly 
 ```
 
 ## Load Balancing
-A Traefik reverse proxy is deployed to distributed traffic between the cluster members. After all instances have been started you can access the portal with the URL `http://intrexx-in-docker.localhost:1337/`. The Traefik dashboard is also available under `http://localhost:8080/dashboard`.
+A Traefik reverse proxy is deployed to load balance traffic between the cluster members. After all instances have been started you can access the portal with the URL `http://intrexx-in-docker.localhost:1337/`. The Traefik dashboard is also available under `http://localhost:8080/dashboard`.
 
 # Tags
 
