@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
     ports:
      - "${SOLR_HOST_PORT}:8983"
-    command: -c
+    command: -c -t
     volumes:
      - intrexx-solr-data:/var/solr
 
