@@ -27,6 +27,9 @@ services:
       - ${ZOOKEEPER_METRICS_PORT}:7000
     environment:
       ZOO_4LW_COMMANDS_WHITELIST: mntr, conf, ruok
+    volumes:
+      - intrexx-zookeeper-data:/data
+      - intrexx-zookeeper-datalog:/datalog
 
 # Uploads the security.json to the zookeeper - there is actually no other way to do this
   solr-init:
@@ -39,12 +42,11 @@ services:
       ZK_HOST: zookeeper:${ZOOKEEPER_PORT}
     ports:
      - "${SOLR_HOST_PORT}:8983"
-    command: bash -c "bin/solr zk cp file:/var/solr/cfg/security.json zk:/security.json"
+    command: bash -c "bin/solr zk cp file:/tmp/security.json zk:/security.json"
     volumes:
-     - intrexx-solr-data:/var/solr
      # security.json is world-readable --> secure?
      # The hash needs to be computed using a tool like https://github.com/ansgarwiechers/solrpasswordhash
-     - ./resource/zookeeper/security.json:/var/solr/cfg/security.json:ro
+     - ./resource/zookeeper/security.json:/tmp/security.json:ro
 
 # A solr node in the "cluster"
   solr:
@@ -186,5 +188,7 @@ services:
 volumes:
   portal-data:
   intrexx-db-data:
+  intrexx-zookeeper-data:
+  intrexx-zookeeper-datalog:
   intrexx-solr-data:
   intrexx-cfg:
