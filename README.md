@@ -50,27 +50,44 @@ As described above, the portal directory (/opt/intrexx/org) is a named volume in
 In order to make this work at least the two variables `IX_PORTAL_ZIP_NAME` and `IX_PORTAL_DIR_HOST` must be specified via the .env file. In addition, the docker-compose.yml must be adapted as follows:
 
 ```yml
-# Case 1 (portal is provided from mounted host directory)
+# Case 1 (The portal zip is provided from a mounted host directory -> The portal data will be located within a bind mount)
+
+intrexx-init:
+  ...
+  volumes:
+#   - portal-data:/opt/intrexx/org
+    - intrexx-cfg:/opt/intrexx/cfg
+    - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+#   - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
 
 intrexx:
   ...
-    volumes:
-#      - portal-data:/opt/intrexx/org
-      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
-#      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
+  volumes:
+#   - portal-data:/opt/intrexx/org
+    - intrexx-cfg:/opt/intrexx/cfg
+    - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
 ```
 
-If you don't want to bind-mount /opt/intrexx/org to `IX_PORTAL_DIR_HOST` on the host and /opt/intrexx/org in the container should still be within a named volume, you can use an additional volume containing only the portal zip. In this case, the (absolute) path to mount point within the container must be provided via the .env file (`IX_PORTAL_ZIP_MNTPT`). The docker-compose.yml must then be adjusted as follows:
+If you don't want to bind-mount /opt/intrexx/org to `IX_PORTAL_DIR_HOST` on the host and /opt/intrexx/org in the container should still be within a named volume, you can use an additional bind mount containing only the portal zip. In this case, the (absolute) path to mount point within the container must be provided via the .env file (`IX_PORTAL_ZIP_MNTPT`). The docker-compose.yml must then be adjusted as follows:
 
 ```yml
-# Case 2 (portal is provided from additional volume)
+# Case 2 (The portal zip is provided from an additional bind mount -> The portal data will be located within a named volume)
+
+intrexx-init:
+  ...
+  volumes:
+    - portal-data:/opt/intrexx/org
+    - intrexx-cfg:/opt/intrexx/cfg
+ #  - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+    - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
 
 intrexx:
   ...
-    volumes:
-      - portal-data:/opt/intrexx/org
-#      - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
-      - ${IX_PORTAL_DIR_HOST}:${IX_PORTAL_ZIP_MNTPT}
+  volumes:
+    - portal-data:/opt/intrexx/org
+    - intrexx-cfg:/opt/intrexx/cfg
+#   - ${IX_PORTAL_DIR_HOST}:/opt/intrexx/org
+    
 
 ```
 
