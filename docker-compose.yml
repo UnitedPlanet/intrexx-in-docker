@@ -84,6 +84,7 @@ services:
       SOLR_USER: ${SOLR_USER}
       SOLR_PASSWORD: ${SOLR_PASSWORD}
       SOLR_SASL_DISABLED: "true"
+      SOLR_PATH: ${SOLR_PATH}
       PORTAL_NAME: ${IX_PORTAL_NAME}
       PORTAL_BASE_URL: ${IX_PORTAL_BASE_URL}
       PORTAL_ZIP_NAME: ${IX_PORTAL_ZIP_NAME:-portal-template.zip}
@@ -120,6 +121,7 @@ services:
       SOLR_USER: ${SOLR_USER}
       SOLR_PASSWORD: ${SOLR_PASSWORD}
       SOLR_SASL_DISABLED: "true"
+      SOLR_PATH: ${SOLR_PATH}
       PORTAL_NAME: ${IX_PORTAL_NAME}
       PORTAL_BASE_URL: ${IX_PORTAL_BASE_URL}
       PORTAL_ZIP_NAME: ${IX_PORTAL_ZIP_NAME:-portal-template.zip}

@@ -216,6 +216,7 @@ Name | Default value | Description
 `IX_DISTRIBUTED_NODELIST` | "" | List of all nodes in a distributed cluster. Either DNS (or container names) or IP.
 `SOLR_HOST` | solr | Hostname of the SOLR zookeeper server.
 `SOLR_USER` | solr | Username for zookeeper connection. Usually the default credentials need to be used. See section "Configure Solr credentials" above.
+`SOLR_PATH` | "" | Path of SOLR URL. Available from version 11.0.8 and 11.8.0 onwards.
 `SOLR_PASSWORD` | SolrRocks | Password for zookeeper connection. Usually the default credentials need to be used. See section "Configure Solr credentials" above.
 `SOLR_PORT` | 9983 | Port of the SOLR zookeeper.
 `SOLR_SASL_DISABLED` | true | If SOLR is run without SASL, this parameter adjusts the intrexx search client accordingly.
