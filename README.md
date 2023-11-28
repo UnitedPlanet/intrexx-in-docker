@@ -2,7 +2,9 @@
 
 __ATTENTION:__ Please refer to the Docker Hub page, for a list of available image names.
 
-Intrexx in Docker creates an ensemble of containers to host an Intrexx instance plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool.
+Intrexx in Docker creates an ensemble of containers to host an Intrexx instance plus a portal. It builds on the basic idea that the portal is not part of the image. Instead, the image is just an Intrexx runtime (stripped heavily from a default intrexx installation) plus the blank portal template. Docker Compose is used as a deployment tool. 
+
+Following this default configuration it will create a deployment with a dedicated user and group `intrexx` instead of `root` both with id 1000.
 
 There are four use-cases:
 
