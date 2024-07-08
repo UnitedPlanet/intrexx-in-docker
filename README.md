@@ -41,6 +41,8 @@ docker compose up -d --always-recreate-deps
 
 This will create three containers: database, Solr server and portal. The portal directory will be created in a named Docker volume. This may be used to backup data but also persists the portal between upgrades.
 
+The default credentials are user `Administrator` with a blank password.
+
 ## Create new portal from export
 
 Many users might already have a portal (export) that they wish to deploy in Docker. To achieve that, the portal must be provided in zip format.
